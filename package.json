@@ -19,7 +19,10 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "nodemon",
-    "build": "tsc"
+    "build": "rimraf dist && tsc",
+    "prepare:zip": "node scripts/create-zip.js",
+    "release": "pnpm run build && pnpm run prepare:zip",
+    "publish": "pnpm run release && node scripts/create-tag.js"
   },
   "dependencies": {
     "basic-ftp": "^5.0.5",
@@ -27,9 +30,12 @@
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
+    "archiver": "^7.0.1",
     "nodemon": "^3.1.7",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "zip": "^1.2.0"
   }
 }

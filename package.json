@@ -1,0 +1,35 @@
+{
+  "name": "@happy-fox/ftp-sync",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "author": {
+    "name": "Adrian M. A. Urrea",
+    "email": "yasnoadriandatos@gmail.com"
+  },
+  "license": "ISC",
+  "engines": {
+    "node": "20.15.1"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "nodemon",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "basic-ftp": "^5.0.5",
+    "ignore": "^6.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.8.1",
+    "typescript": "^5.6.3"
+  }
+}

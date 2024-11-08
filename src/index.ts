@@ -37,10 +37,12 @@ export class FTPClient {
     await this.connectionManager.acquireConnection();
     const access = await this.connect();
 
+    console.log("\n");
+
     this.util.taskLog(
       mode,
       "info",
-      "\nGetting file list, this may take a while...",
+      "Getting file list, this may take a while..."
     );
 
     const source = {
@@ -49,7 +51,7 @@ export class FTPClient {
         access,
         srcRoot,
         mode === "local" ? "remote" : "local",
-        true,
+        true
       ),
     };
 
@@ -59,20 +61,22 @@ export class FTPClient {
         access,
         desRoot,
         mode === "local" ? "local" : "remote",
-        true,
+        true
       ),
     };
 
     this.util.taskLog(
       mode,
       "info",
-      `${source.list.length} files to ${mode === "local" ? "download" : "upload"}`,
+      `${source.list.length} files to ${
+        mode === "local" ? "download" : "upload"
+      }`
     );
     this.util.taskLog(mode, "info", "Starting synchronization...");
     this.util.taskLog(
       mode,
       "info",
-      `${source.root} ${mode === "local" ? "<<<" : ">>>"} ${destination.root}`,
+      `${source.root} ${mode === "local" ? "<<<" : ">>>"} ${destination.root}`
     );
 
     this.disconnect(access);
@@ -118,7 +122,7 @@ export class FTPClient {
     directory: string,
     mode: "remote" | "local",
     recursive: boolean = false,
-    root?: string,
+    root?: string
   ) {
     const files: FTPFileInfo[] = [];
     let list: FTPFileInfo[] = [];
@@ -142,7 +146,7 @@ export class FTPClient {
       list = await Promise.all(
         dirFiles.map(async (name): Promise<FTPFileInfo> => {
           const stat = await fs.promises.stat(
-            path.join(root ?? directory, name),
+            path.join(root ?? directory, name)
           );
           const type = stat.isDirectory() ? 2 : 1;
           const modifiedAt = stat.mtime ?? stat.ctime;
@@ -158,7 +162,7 @@ export class FTPClient {
             type,
             modifiedAt,
           } as FTPFileInfo;
-        }),
+        })
       );
     }
 
@@ -178,7 +182,7 @@ export class FTPClient {
             file.name,
             mode,
             true,
-            fullPath,
+            fullPath
           );
           files.push(...subFiles);
 
@@ -207,7 +211,7 @@ export class FTPClient {
   private async startSyncTasks(
     source: SyncList,
     destination: SyncList,
-    mode: FTPSymbolMode,
+    mode: FTPSymbolMode
   ) {
     console.log(" ");
     const effectiveMaxConnections = 5;
@@ -231,11 +235,11 @@ export class FTPClient {
             const sourceFile = sourceList.shift();
             if (sourceFile?.path) {
               sourceFile.path.common = sourceFile.path.full.slice(
-                sourceRoot.length,
+                sourceRoot.length
               );
               const index = destinationList.findIndex((destFile) => {
                 destFile.path.common = destFile.path.full.slice(
-                  destinationRoot.length,
+                  destinationRoot.length
                 );
                 return destFile.path.common === sourceFile.path.common;
               });
@@ -245,7 +249,10 @@ export class FTPClient {
 
               if (!destinationFile) {
                 if (mode === "remote") {
-                  const dir = sourceRoot + sourceFile.path.dir;
+                  const dir =
+                    destinationRoot +
+                    sourceFile.path.common.split("/").slice(0, -1).join("/");
+
                   await this.accessList[access].ensureDir(dir);
                   await this.accessList[access].cd("/");
                 } else if (mode === "local") {
@@ -270,19 +277,20 @@ export class FTPClient {
               }
 
               if (mode === "remote") {
+                const dir = destinationRoot + sourceFile.path.common;
                 await this.accessList[access].uploadFrom(
                   sourceFile.path.full,
-                  destinationFile?.path.full || sourceFile.path.full,
+                  dir
                 );
               } else if (mode === "local") {
                 await this.accessList[access].downloadTo(
                   path.join(destinationRoot, sourceFile.path.common),
-                  sourceFile.path.full,
+                  sourceFile.path.full
                 );
                 await utimes(
                   path.join(destinationRoot, sourceFile.path.common),
                   sourceFile.modifiedAt ?? Date.now(),
-                  sourceFile.modifiedAt ?? Date.now(),
+                  sourceFile.modifiedAt ?? Date.now()
                 );
               }
 
@@ -299,14 +307,19 @@ export class FTPClient {
               const obsoleteFile = destinationList.shift();
               if (obsoleteFile?.path?.full) {
                 await this.accessList[access].cd("/");
-                const dir = path.join(destinationRoot, obsoleteFile.path.dir);
+                const full = obsoleteFile.path.full;
+                const dir = full.split("/").slice(0, -1).join("/");
 
-                filename = obsoleteFile.path.full.slice(destinationRoot.length);
+                filename = full.slice(destinationRoot.length);
                 if (mode === "remote") {
+                  const dir = full.split("/").slice(0, -1).join("/");
                   await this.accessList[access].remove(obsoleteFile.path.full);
-                  await this.accessList[access].removeEmptyDir(dir);
+                  const list = await this.accessList[access].list(dir);
+                  if (list.length === 0) {
+                    await this.accessList[access].removeEmptyDir(dir);
+                  }
                 } else if (mode === "local") {
-                  await unlink(obsoleteFile.path.full);
+                  await unlink(full);
                   if ((await readdir(dir)).length === 0) {
                     await rmdir(dir);
                   }
@@ -357,7 +370,7 @@ export class FTPClient {
 
       const maxConection =
         totalTasks >= 5 ? effectiveMaxConnections : totalTasks;
-      for (let i = 0; i < maxConection; i++) {
+      for (let i = 0; i < 1; i++) {
         processNextFile();
       }
     });

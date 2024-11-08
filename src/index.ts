@@ -370,7 +370,7 @@ export class FTPClient {
 
       const maxConection =
         totalTasks >= 5 ? effectiveMaxConnections : totalTasks;
-      for (let i = 0; i < 1; i++) {
+      for (let i = 0; i < maxConection; i++) {
         processNextFile();
       }
     });

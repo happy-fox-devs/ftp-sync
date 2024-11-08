@@ -19,10 +19,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "nodemon",
-    "build": "rimraf dist && tsc",
-    "prepare:zip": "node scripts/create-zip.js",
-    "release": "pnpm run build && pnpm run prepare:zip",
-    "publish": "pnpm run release && node scripts/create-tag.js"
+    "build": "rimraf dist && tsc"
   },
   "dependencies": {
     "basic-ftp": "^5.0.5",

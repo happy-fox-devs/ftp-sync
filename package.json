@@ -1,16 +1,16 @@
 {
-  "name": "@happy-fox/ftp-sync",
+  "name": "@happy-fox-devs/ftp-sync",
   "version": "0.1.1-alpha",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "keywords": [],
   "author": {
     "name": "Adrian M. A. Urrea",
     "email": "yasnoadriandatos@gmail.com"
+  },
+  "repository": {
+    "url": "git+https://github.com/happy-fox-devs/ftp-sync.git"
   },
   "license": "ISC",
   "engines": {
@@ -21,6 +21,15 @@
     "dev": "nodemon",
     "build": "rimraf dist && tsc"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
   "dependencies": {
     "basic-ftp": "^5.0.5",
     "ignore": "^6.0.2"

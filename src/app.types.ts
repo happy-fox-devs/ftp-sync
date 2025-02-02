@@ -4,11 +4,26 @@ export type FTPConnectionQueue = {
   resolve: (value: number) => void;
   reject: (reason?: any) => void;
   timestamp: number;
-}
+};
 
-export type FTPSymbolMode = "remote" | "local";
+export type FTPOptionMode = "push" | "pull";
 
-export type FTPSymbolStatus = "uploaded" | "replaced" | "identical" | "obsolete" | "error" | "info" | "warn" | "erro";
+export type FTPOptionOperation = "copy" | "move";
+
+export type FTPSyncOptions = {
+  mode: FTPOptionMode;
+  operation?: FTPOptionOperation;
+};
+
+export type FTPSymbolStatus =
+  | "uploaded"
+  | "replaced"
+  | "identical"
+  | "obsolete"
+  | "error"
+  | "info"
+  | "warn"
+  | "erro";
 
 export type FTPConfig = {
   host: string;
@@ -36,7 +51,3 @@ export type FTPFileInfo = {
   modifiedAt?: Date;
   path: { full: string; dir: string; common?: string };
 };
-
-declare module 'bash-color' {
-  export default function (text: string): string;
-}

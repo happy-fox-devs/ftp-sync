@@ -1,13 +1,9 @@
-import { FTPConnectionQueue } from "../types";
+import { FTPConnectionQueue } from "../app.types";
 
 export class FTPConnectionManager {
   private static instance: FTPConnectionManager;
-  private readonly maxServerConnections: number = parseInt(
-    process.env.FTP_MAX_CONNECTIONS || "50",
-  );
-  private activeConnections: number = parseInt(
-    process.env.FTP_MAX_CONNECTIONS_PER_IP || "5",
-  );
+  private readonly maxServerConnections: number = parseInt(process.env.FTP_MAX_CONNECTIONS || "50");
+  private activeConnections: number = parseInt(process.env.FTP_MAX_CONNECTIONS_PER_IP || "5");
   private connectionQueue: Array<FTPConnectionQueue> = [];
 
   private constructor() {}
@@ -27,9 +23,7 @@ export class FTPConnectionManager {
 
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        const index = this.connectionQueue.findIndex(
-          (item) => item.resolve === resolve,
-        );
+        const index = this.connectionQueue.findIndex((item) => item.resolve === resolve);
         if (index !== -1) {
           this.connectionQueue.splice(index, 1);
           reject(new Error("Connection timeout - server busy"));

@@ -1,4 +1,4 @@
-import { FTPSymbolMode, FTPSymbolStatus } from "../types";
+import { FTPOptionMode, FTPSymbolStatus } from "../app.types";
 
 export class FTPSymbols {
   public static readonly general = {
@@ -41,17 +41,22 @@ export class FTPSymbols {
   }
 
   public taskLog(
-    mode: FTPSymbolMode,
+    mode: FTPOptionMode,
     status: FTPSymbolStatus,
-    ...message: (string | number)[]
+    ...message: (string | number | undefined)[]
   ) {
     if (this.verbose === "false") return;
 
-    const _mode = mode === "remote" ? "remote" : "local";
+    const _mode = mode === "push" ? "remote" : "local";
     const _status = status === "info" ? "info" : status;
 
     const symbol = FTPSymbols[_mode][_status];
 
-    console.log(` ${symbol} | ${message}`);
+    console.log(` ${symbol} | ${message.join(" ")}`);
+  }
+
+  public breakLine() {
+    if (this.verbose === "false") return;
+    console.log(" ");
   }
 }

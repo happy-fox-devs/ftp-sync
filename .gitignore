@@ -5,3 +5,5 @@ scripts
 
 .env*
 pnpm-lock.yaml
+
+test

@@ -13,6 +13,7 @@ export type FTPOptionOperation = "copy" | "move";
 export type FTPSyncOptions = {
   mode: FTPOptionMode;
   operation?: FTPOptionOperation;
+  delFiles?: boolean;
 };
 
 export type FTPSymbolStatus =

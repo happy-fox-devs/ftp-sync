@@ -66,7 +66,7 @@ export class FTPClient {
     this.disconnect(access);
     this.connectionManager.releaseConnection();
 
-    return await this.startSyncTasks(localObj, remoteObj, mode, operation);
+    return await this.startSyncTasks(localObj, remoteObj, options);
   }
 
   private async connect() {
@@ -199,9 +199,10 @@ export class FTPClient {
   private async startSyncTasks(
     local: SyncList,
     remote: SyncList,
-    mode: FTPOptionMode,
-    operation?: FTPOptionOperation
+    options: FTPSyncOptions
   ) {
+    const { mode, operation = "copy", delFiles = true } = options;
+
     this.util.breakLine();
     const effectiveMaxConnections = 5;
     const src = mode === "pull" ? remote : local;
@@ -318,7 +319,7 @@ export class FTPClient {
                   }
                 }
               }
-            } else if (des.list.length > 0) {
+            } else if (delFiles && des.list.length > 0) {
               const desFile = des.list.shift();
 
               if (!desFile) return;

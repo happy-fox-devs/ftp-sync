@@ -1,5 +1,15 @@
 # @happy-fox/ftp-sync
 
+## 1.0.1-alpha
+
+### Patch Changes
+
+- **Description**
+
+    - In the third parameter of the **sync** function an new option has been added called **delFiles** of type **boolean**.
+      - The **delFiles** option is **optional** and defaults to `true`.
+      - If set to `false`, the synchronization process will not delete the remaining files in the remote directory after the operation.
+
 ## 1.0.0-alpha
 
 ### Major Changes

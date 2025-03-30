@@ -1,5 +1,11 @@
 # @happy-fox/ftp-sync
 
+## 1.0.3-alpha
+
+### Patch Changes
+
+- Remove pnpm only
+
 ## 1.0.2-alpha
 
 ### Patch Changes

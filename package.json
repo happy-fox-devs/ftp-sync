@@ -1,6 +1,6 @@
 {
   "name": "@happy-fox/ftp-sync",
-  "version": "1.0.2-alpha",
+  "version": "1.0.3-alpha",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,7 +17,6 @@
     "node": "^20.15.1"
   },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "dev": "nodemon",
     "build": "rimraf dist && tsc"
   },
